@@ -24,7 +24,7 @@
 
   <div class="members-box">
     <label class="member-row" *ngFor="let m of members">
-      <input type="checkbox" required [(ngModel)]="m.selected" [checked]="m.memberId === userId" [disabled]="m.memberId === userId" />
+      <input type="checkbox" required [(ngModel)]="m.selected" [disabled]="m.memberId === userId" />
       <span class="member-name">{{ m.memberName }}</span>
     </label>
     <p class="validation" *ngIf="!areMembersSelected">Select atleast 1 Member</p>

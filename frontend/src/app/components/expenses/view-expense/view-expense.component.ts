@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { User } from '../../users/user.service';
 import { PopupComponent } from '../../shared/popup/popup.component';
@@ -13,7 +13,7 @@ import { SettlementsService } from '../../settlements/settlements.service';
 @Component({
   selector: 'app-groups',
   standalone: true,
-  imports: [CommonModule, FormsModule, PopupComponent, RouterLink],
+  imports: [CommonModule, FormsModule, PopupComponent],
   templateUrl: './view-expense.component.html',
   styleUrls: ['./view-expense.component.css'],
 })

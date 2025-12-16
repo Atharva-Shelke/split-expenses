@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { AppLayoutComponent } from './components/shared/layout/app-layout.component';
-import { UsersComponent } from './components/users/users.component';
+// import { UsersComponent } from './components/users/users.component';
 import { AuthGuard } from './components/auth/auth.guard';
 import { GroupsComponent } from './components/groups/groups.component';
 import { GroupMembersComponent } from './components/group-members/group-members.component';
@@ -23,7 +23,7 @@ export const routes: Routes = [
     component: AppLayoutComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: 'users', component: UsersComponent },
+      // { path: 'users', component: UsersComponent },
       { path: 'groups', component: GroupsComponent },
       { path: 'group-members', component: GroupMembersComponent },
       { path: 'add-expense', component: AddExpenseComponent },

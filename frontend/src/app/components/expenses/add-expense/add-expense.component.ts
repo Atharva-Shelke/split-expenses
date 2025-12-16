@@ -47,17 +47,17 @@ export class AddExpenseComponent implements OnInit {
 
     this.members = this.sharedDataService.getMembers().map((m) => ({
       ...m,
-      selected: false,
+      selected: m.memberId === this.userId,
     }));
   }
 
   toggleSelectAll() {
-    this.members.forEach((m) => (m.selected = this.selectAll));
+    this.members.forEach((m) => {
+      if (m.memberId !== this.userId) {
+        m.selected = this.selectAll;
+      }
+    });
   }
-
-  // checkIfAllSelected() {
-  //   this.selectAll = this.members.every((m) => m.selected);
-  // }
 
   get areMembersSelected(): boolean {
     return this.members.some((m) => m.selected);
