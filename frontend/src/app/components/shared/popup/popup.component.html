@@ -1,0 +1,8 @@
+<div class="popup-backdrop" *ngIf="show">
+  <div class="popup-box">
+    <h3>{{ title }}</h3>
+    <p>{{ message }}</p>
+
+    <button (click)="samePage? close() : closeAndBack()">OK</button>
+  </div>
+</div>

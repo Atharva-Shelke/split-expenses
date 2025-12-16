@@ -1,0 +1,63 @@
+<div class="view-settlement-container">
+  <h2>
+    {{ toggleView ? 'Sent Settlement Requests in' : 'Received Settlement Requests in ' }}
+    {{ groupName }}
+  </h2>
+
+  <button class="toggle-view-btn" (click)="toggleSettlementsView()">
+    {{ toggleView ? 'Show Received' : 'Show Sent' }}
+  </button>
+
+  <button class="back-btn" style="float: right" (click)="previousPage()">
+    <img class="back-img" [src]="'back-icon.png'" alt="Back" title="Back" />
+  </button>
+
+  <table class="settlement-table">
+    <thead>
+      <tr>
+        <th>Requested By</th>
+        <th>Requested To</th>
+        <th>Split Amount</th>
+        <th>Requested On</th>
+        <th>Responded On</th>
+        <th>Status</th>
+        <th [hidden]="toggleView">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let s of settlements; let i = index">
+        <td>{{ s.fromUsername }}</td>
+        <td>{{ s.toUsername }}</td>
+        <td>{{ s.amount }}</td>
+        <td>{{ s.createdOn }}</td>
+        <td>{{ s.modifiedOn }}</td>
+        <td>{{ s.statusDescription }}</td>
+        <td [hidden]="toggleView" style="text-align: center">
+          <button
+            class="approve-btn"
+            [disabled]="s.statusCode == 1001 || s.statusCode == 1003"
+            (click)="approveSettlement(i)"
+          >
+            Approve
+          </button>
+          <button
+            class="reject-btn"
+            [disabled]="s.statusCode == 1001 || s.statusCode == 1003"
+            (click)="rejectSettlement(i)"
+          >
+            Reject
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<app-popup
+  [show]="showPopup"
+  [title]="popupTitle"
+  [message]="popupMessage"
+  (closed)="showPopup = false"
+>
+</app-popup>

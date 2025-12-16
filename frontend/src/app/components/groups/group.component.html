@@ -1,0 +1,64 @@
+<div class="groups-container">
+  <h2>Groups</h2>
+
+  <button class="add-btn" (click)="openAddModal()">+ Create Group</button>
+
+  <table class="groups-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Created By</th>
+        <th>Created On</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let g of groups; let i = index">
+        <td>{{ g.groupName }}</td>
+        <td>{{ g.createdBy }}</td>
+        <td>{{ g.createdOn }}</td>
+        <td style="padding-left: 10%">
+          <button class="view-group-btn" (click)="viewGroup(i)">View Group</button>
+          <button class="edit-btn" [hidden]="g.createdBy != username" (click)="openEditModal(i)">Edit</button>
+          <button class="delete-btn" [hidden]="g.createdBy != username" (click)="deleteGroup(i)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Add/Edit Modal -->
+  <div class="modal-backdrop" *ngIf="isModalOpen">
+    <div class="modal-box">
+      <h3>{{ editIndex === -1 ? 'Create Group' : 'Edit Group' }}</h3>
+
+      <form (ngSubmit)="saveGroup()">
+        <table class="edit-table">
+          <tbody>
+            <tr>
+              <td><label>Name</label></td>
+              <td>
+                <input
+                  [(ngModel)]="form.groupName"
+                  name="editGroupname{{ form.groupId }}"
+                  required
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="modal-buttons">
+          <button type="submit" class="save-btn">Save</button>
+          <button type="button" class="cancel-btn" (click)="closeModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+  <app-popup
+  [show]="showPopup"
+  [title]="popupTitle"
+  [message]="popupMessage"
+  (closed)="showPopup = false">
+</app-popup>

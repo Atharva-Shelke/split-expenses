@@ -1,0 +1,67 @@
+<div class="login-page">
+  <div class="login-card">
+    <h2 class="title">Create Account</h2>
+    <p class="subtitle">Register as a new user</p>
+
+    <form #regForm="ngForm" (ngSubmit)="onRegister(regForm)">
+      <div class="input-group">
+        <label>Username</label>
+        <input [(ngModel)]="form.username" name="username" required #userCtrl="ngModel" />
+        <p class="validation" *ngIf="userCtrl.invalid && userCtrl.touched">Username required</p>
+      </div>
+      <div class="input-group">
+        <label>Email</label>
+        <input [(ngModel)]="form.email" name="email" required #emailCtrl="ngModel" />
+        <p class="validation" *ngIf="emailCtrl.invalid && emailCtrl.touched">Email required</p>
+      </div>
+      <div class="input-group">
+        <label>Mobie No</label>
+        <input [(ngModel)]="form.mobileNo" name="mobileNo" required #mobileNoCtrl="ngModel" />
+        <p class="validation" *ngIf="mobileNoCtrl.invalid && mobileNoCtrl.touched">
+          Mobile Number required
+        </p>
+      </div>
+
+      <div class="input-group">
+        <label>Password</label>
+        <div class="password-wrapper">
+          <input
+            [(ngModel)]="form.password"
+            name="password"
+            [type]="showPassword ? 'text' : 'password'"
+            required
+            #passwordCtrl="ngModel"
+          />
+          <img
+            class="toggle-icon"
+            (click)="togglePassword()"
+            [src]="showPassword ? 'eye-slash.svg' : 'eye.svg'"
+            alt="toggle password"
+          />
+        </div>
+        <p class="validation" *ngIf="passwordCtrl.invalid && passwordCtrl.touched">
+          Password required
+        </p>
+      </div>
+
+      <button class="login-btn" [disabled]="regForm.invalid || loading">
+        <span *ngIf="!loading">Register</span>
+        <span *ngIf="loading" class="spinner"></span>
+      </button>
+
+      <div class="links">
+        <a routerLink="/login">Already have an account?</a>
+      </div>
+    </form>
+
+    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+  </div>
+</div>
+<app-popup
+  [show]="showPopup"
+  [title]="popupTitle"
+  [message]="popupMessage"
+  [samePage]="samePage"
+  (closed)="showPopup = false"
+>
+</app-popup>

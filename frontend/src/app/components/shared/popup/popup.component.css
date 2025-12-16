@@ -1,0 +1,36 @@
+.popup-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup-box {
+  background: #fff;
+  padding: 20px 30px;
+  width: 300px;
+  border-radius: 12px;
+  text-align: center;
+  animation: pop 0.25s ease-out;
+}
+
+@keyframes pop {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+button {
+  margin-top: 20px;
+  padding: 7px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+}

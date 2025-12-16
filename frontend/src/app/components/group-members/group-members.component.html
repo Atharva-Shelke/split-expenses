@@ -1,0 +1,73 @@
+<div class="groupMembers-container">
+  <h2>{{ groupName }}</h2>
+
+  <button class="add-btn" (click)="openAddMemberModal()">+ Add Group Member</button>&nbsp;
+  <button class="add-btn" (click)="openAddExpensePage()">+ Add Expense</button>&nbsp;
+  <button class="view-btn" (click)="viewSettlement()">View Settlements</button>&nbsp;
+  <button class="exit-btn" *ngIf="isMember" (click)="exitGroup()">- Exit Group</button>
+  <button class="back-btn" style="float: right" (click)="previousPage()">
+    <img class="back-img" [src]="'back-icon.png'" alt="Back" title="Back" />
+  </button>
+
+  <table class="groupMembers-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Added On</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let g of groupMembers; let i = index">
+        <td>{{ g.memberName }}</td>
+        <td>{{ g.memberType }}</td>
+        <td>{{ g.addedOn }}</td>
+        <td style="padding-left: 12%">
+          <button class="view-expense-btn" (click)="viewExpense(i)">View Expense</button>
+          <button
+            class="delete-btn"
+            *ngIf="isOwner"
+            [hidden]="g.memberType == 'OWNER'"
+            (click)="deleteGroupMember(i)"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Add Member Modal -->
+  <div class="modal-backdrop" *ngIf="isMemberModalOpen">
+    <div class="modal-box">
+      <h3>Add Group Member</h3>
+
+      <form (ngSubmit)="saveGroupMember()">
+        <table class="edit-table">
+          <tbody>
+            <tr>
+              <td><label>Name</label></td>
+              <td><input [(ngModel)]="form.username" name="name" required /></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="modal-buttons">
+          <button type="submit" class="save-btn">Save</button>
+          <button type="button" class="cancel-btn" (click)="closeModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<app-popup
+  [show]="showPopup"
+  [title]="popupTitle"
+  [message]="popupMessage"
+  [samePage]="samePage"
+  (closed)="showPopup = false"
+>
+</app-popup>

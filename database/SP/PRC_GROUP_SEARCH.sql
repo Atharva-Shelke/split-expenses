@@ -1,0 +1,52 @@
+create or replace PROCEDURE PRC_GROUP_SEARCH (
+    I_USER_ID         IN  USERS.USER_ID%TYPE,
+    I_GROUP_ID        IN GROUPS.GROUP_ID%TYPE,
+    I_GROUP_NAME      IN GROUPS.GROUP_NAME%TYPE,
+    I_OPERATION_STATE IN VARCHAR2,
+    I_START           IN NUMBER,
+    I_LIMIT           IN NUMBER,
+    O_RESULT          OUT SYS_REFCURSOR,
+    O_STATUS_CODE     OUT NUMBER,
+    O_STATUS_MESSAGE  OUT VARCHAR2
+)
+AS
+v_count NUMBER;
+v_start NUMBER := NVL(I_START, 0);
+v_limit NUMBER := NVL(I_LIMIT, 10);
+v_end NUMBER := v_start + v_limit;
+BEGIN
+
+    IF I_OPERATION_STATE = 'FETCH_ALL' THEN
+        OPEN O_RESULT FOR SELECT T.* FROM (SELECT ROWNUM AS RN, GROUP_ID, GROUP_NAME, CREATED_BY,
+        TO_CHAR(CREATED_ON,'DD-MON-YYYY') as CREATED_ON, TO_CHAR(MODIFIED_ON,'DD-MON-YYYY') as MODIFIED_ON
+            FROM GROUPS
+            WHERE GROUP_ID IN (SELECT GROUP_ID FROM GROUP_MEMBERS WHERE MEMBER_ID = I_USER_ID)
+            )T WHERE T.RN > v_start AND T.RN <= v_end;
+        O_STATUS_CODE := 100;
+        O_STATUS_MESSAGE := 'All groups fetched successfully.';
+
+    ELSIF I_OPERATION_STATE = 'FETCH_BY_PARAM' THEN        
+        SELECT COUNT(1) INTO v_count FROM GROUPS WHERE GROUP_NAME LIKE '%'||I_GROUP_NAME||'%';
+        IF v_count > 0 THEN
+            OPEN O_RESULT FOR
+                SELECT GROUP_ID, GROUP_NAME, CREATED_BY, TO_CHAR(CREATED_ON,'DD-MON-YYYY') as CREATED_ON
+                FROM GROUPS
+                WHERE GROUP_NAME LIKE '%'||I_GROUP_NAME||'%';
+            O_STATUS_CODE := 100;
+            O_STATUS_MESSAGE := 'Group fetched successfully.';
+        ELSE
+            OPEN O_RESULT FOR SELECT * FROM DUAL WHERE 1=2;
+            O_STATUS_CODE := 991;
+            O_STATUS_MESSAGE := 'Group not found.';
+        END IF;
+
+    ELSE
+        OPEN O_RESULT FOR SELECT * FROM DUAL WHERE 1=2;
+        O_STATUS_CODE := 991;
+        O_STATUS_MESSAGE := 'Invalid operation state.';
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        O_STATUS_CODE := 999;
+        O_STATUS_MESSAGE := 'Error occured in PRC_GROUP_SEARCH: ' || SQLERRM;
+END PRC_GROUP_SEARCH;

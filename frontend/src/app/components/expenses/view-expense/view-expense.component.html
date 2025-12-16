@@ -1,0 +1,90 @@
+<div class="view-expense-container">
+  <h2>Spent by {{ memberName }} in {{ groupName }}</h2>
+
+  <button class="add-btn" [hidden]="memberId == userId" (click)="openAddSettlementModal()">
+    + Settle Split</button
+  >&nbsp;
+  <button class="toggle-view-btn" [hidden]="memberId == userId" (click)="toggleSplitView()">
+    {{ toggleView ? 'Show My Splits' : 'Show All Expenses' }}
+  </button>
+
+  <button class="back-btn" style="float: right" (click)="previousPage()">
+    <img class="back-img" [src]="'back-icon.png'" alt="Back" title="Back" />
+  </button>
+
+  <table class="expense-table">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Expense</th>
+        <th>Split Among</th>
+        <th>Split Amount</th>
+        <th>Spent On</th>
+        <th [hidden]="memberId != userId">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let e of expense; let i = index">
+        <td>{{ e.description }}</td>
+        <td>{{ e.amount }}</td>
+        <td>{{ e.memberNames }}</td>
+        <td>{{ e.splitAmount }}</td>
+        <td>{{ e.createdOn }}</td>
+        <td [hidden]="memberId != userId" style="text-align: center">
+          <button class="delete-btn" (click)="deleteExpense(i)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Add Member Modal -->
+  <div class="modal-backdrop" *ngIf="isSettlementModalOpen">
+    <div class="modal-box">
+      <div *ngIf="split.totalSplitAmount <= 0">
+        <h2 style="text-align: center">Voila!!</h2>
+        <h4>
+          You don't owe anything to {{ memberName }}
+          {{ split.totalSplitAmount < 0 ? ', however...!' : '!!' }}!
+        </h4>
+        <div class="modal-buttons">
+          <button class="save-btn" (click)="closeModal()">OK</button>
+        </div>
+      </div>
+
+      <div *ngIf="split.totalSplitAmount > 0 && split.canRequest === 1">
+        <h2 style="text-align: center">Uh Oh!!</h2>
+        <h3>You owe {{ split.totalSplitAmount }} to {{ memberName }}, settle it?</h3>
+        <div class="modal-buttons">
+          <button class="save-btn" (click)="requestSettlement()">Yes</button>
+          <button class="cancel-btn" (click)="closeModal()">Cancel</button>
+        </div>
+      </div>
+
+      <div *ngIf="split.totalSplitAmount > 0 && split.canRequest === 0">
+        <h2 style="text-align: center">
+          {{ split.existingRequestStatus === 1000 ? 'Wait!!' : 'Settled!!' }}
+        </h2>
+        <h4>
+          {{
+            split.existingRequestStatus === 1000
+              ? 'Request for settlement is done, waiting for approval by '
+              : 'Split is Settled with '
+          }}
+          {{ memberName }}
+        </h4>
+        <div class="modal-buttons">
+          <button class="save-btn" (click)="closeModal()">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-popup
+  [show]="showPopup"
+  [title]="popupTitle"
+  [message]="popupMessage"
+  (closed)="showPopup = false"
+>
+</app-popup>

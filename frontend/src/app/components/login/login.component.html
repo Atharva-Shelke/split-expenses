@@ -1,0 +1,54 @@
+<div class="login-page">
+  <div class="login-card">
+    <h2 class="title">Split your Expenses</h2>
+    <p class="subtitle">Login to continue</p>
+
+    <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)">
+      <div class="input-group">
+        <input
+          [(ngModel)]="username"
+          name="username"
+          placeholder="Username"
+          required
+          #userCtrl="ngModel"
+        />
+
+        <p class="validation" *ngIf="userCtrl.invalid && userCtrl.touched">Username is required</p>
+      </div>
+
+      <div class="input-group">
+        <div class="password-wrapper">
+          <input
+            [(ngModel)]="password"
+            name="password"
+            placeholder="Password"
+            required
+            [type]="showPassword ? 'text' : 'password'"
+            #passCtrl="ngModel"
+          />
+
+          <img
+            class="toggle-icon"
+            (click)="togglePassword()"
+            [src]="showPassword ? 'eye-slash.svg' : 'eye.svg'"
+            alt="toggle password"
+          />
+        </div>
+
+        <p class="validation" *ngIf="passCtrl.invalid && passCtrl.touched">Password is required</p>
+      </div>
+
+      <button type="submit" class="login-btn" [disabled]="loginForm.invalid || loading">
+        <span *ngIf="!loading">Login</span>
+        <span *ngIf="loading" class="spinner"></span>
+      </button>
+
+      <div class="links">
+        <a routerLink="/resetPassword">Forgot Password?</a>
+        <a routerLink="/newUserRegistration">Create New Account</a>
+      </div>
+    </form>
+
+    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+  </div>
+</div>

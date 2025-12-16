@@ -1,0 +1,45 @@
+<div class="expense-container">
+
+  <h2>Add Expense</h2>
+
+  <table class="expense-table">
+    <tr>
+      <td>Description</td>
+      <td><input [(ngModel)]="description" required #descriptionCtrl="ngModel"/>
+      <p class="validation" *ngIf="descriptionCtrl.invalid && descriptionCtrl.touched">Description is required</p></td>
+    </tr>
+    <tr>
+      <td>Amount</td>
+      <td><input [(ngModel)]="amount" type="number" #amountCtrl="ngModel"/>
+      <p class="validation" *ngIf="amountCtrl.touched && (amountCtrl.invalid || amountCtrl.value<=0)">Amount is required</p></td>
+    </tr>
+  </table>
+
+  <div class="members-header">Split With:</div>
+
+  <label class="select-all">
+    <input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()" />
+    <span>Select All</span>
+  </label>
+
+  <div class="members-box">
+    <label class="member-row" *ngFor="let m of members">
+      <input type="checkbox" required [(ngModel)]="m.selected" [checked]="m.memberId === userId" [disabled]="m.memberId === userId" />
+      <span class="member-name">{{ m.memberName }}</span>
+    </label>
+    <p class="validation" *ngIf="!areMembersSelected">Select atleast 1 Member</p>
+  </div>
+
+  <div class="btn-container">
+    <button class="save-btn" (click)="saveExpense()" [disabled]="descriptionCtrl.invalid || amountCtrl.value<=0 || !areMembersSelected">Save</button>
+    <button class="cancel-btn" (click)="cancel()">Cancel</button>
+  </div>
+
+</div>
+  <app-popup
+  [show]="showPopup"
+  [title]="popupTitle"
+  [message]="popupMessage"
+  [samePage]="samePage"
+  (closed)="showPopup = false">
+</app-popup>
